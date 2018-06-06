@@ -1,0 +1,30 @@
+#!/usr/bin/python
+import json, requests, sys
+from time import sleep
+from asterisk.agi import *
+
+webhook_url = '<WEBHOOK_URL_SLACK>'
+
+agi = AGI()
+callerId = agi.env['agi_arg_1']
+callerNm = agi.env['agi_arg_2']
+
+if callerNm==callerId: callerNm = 'No name given.'
+
+slack_data = {	'color': '#36a64f', 
+				'text': '@<USER_SLACK>, you have an incoming call.', 
+				'attachments': [
+				{
+					'title': '%(number)s - %(name)s' % {'number': callerId, 'name': callerNm},
+					'title_link': 'tel:%(number)s' % {'number': callerId}
+				}
+				], 
+				'channel': '<BOT_SLACK>'}
+
+response = requests.post(
+	webhook_url, data=json.dumps(slack_data),
+	headers={'Content-Type': 'application/json'}
+)
+
+goto_on_exit(self)
+sys.exit(0)

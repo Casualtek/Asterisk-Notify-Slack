@@ -1,0 +1,33 @@
+#!/usr/bin/python
+import json, requests, sys, base64
+from time import sleep
+from asterisk.agi import *
+
+webhook_url = '<WEBHOOK_URL_SLACK>'
+
+agi = AGI()
+callerId = agi.env['agi_callerid']
+incomingSms = base64.b64decode(agi.env['agi_arg_1'])
+
+slack_data = {	'text': '<USER_SLACK>, you have received a text message.', 
+				'color': 'warning',
+				'attachments': [
+				{
+					'author_name': callerId,
+					'fields': [
+					{
+						'title': incomingSms,
+						'short': False
+					}
+					],
+				}
+				], 
+				'channel': '<BOT_SLACK>'}
+
+response = requests.post(
+	webhook_url, data=json.dumps(slack_data),
+	headers={'Content-Type': 'application/json'}
+)
+
+agi.hangup()
+sys.exit(0)
