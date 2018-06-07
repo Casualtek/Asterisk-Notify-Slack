@@ -14,12 +14,9 @@ slack_data = {	'text': '<USER_SLACK>, you have received a text message.',
 				'attachments': [
 				{
 					'author_name': callerId,
-					'fields': [
-					{
-						'title': incomingSms,
-						'short': False
-					}
-					],
+					'title': incomingSms.encode('utf8'),
+					'footer': 'gsm',
+					'short': False
 				}
 				], 
 				'channel': '<BOT_SLACK>'}
