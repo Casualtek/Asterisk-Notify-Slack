@@ -8,15 +8,17 @@ webhook_url = '<WEBHOOK_URL_SLACK>'
 agi = AGI()
 callerId = agi.env['agi_arg_1']
 callerNm = agi.env['agi_arg_2']
+lineFrom = agi.env['agi_arg_3']
 
 if callerNm==callerId: callerNm = 'No name given.'
 
 slack_data = {	'color': '#36a64f', 
-				'text': '@<USER_SLACK>, you have an incoming call.', 
+				'text': '<USER_SLACK>, you have an incoming call.', 
 				'attachments': [
 				{
-					'title': '%(number)s - %(name)s' % {'number': callerId, 'name': callerNm},
-					'title_link': 'tel:%(number)s' % {'number': callerId}
+					'author_name': '%(number)s' % {'number': callerId},
+					'title': '%(name)s' % {'number': callerId, 'name': callerNm},
+					'footer': '%(lineCallBack)s' % {'lineCallBack': lineFrom}
 				}
 				], 
 				'channel': '<BOT_SLACK>'}
